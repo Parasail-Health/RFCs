@@ -1,126 +1,85 @@
-- Feature Name: `generalized_type_ascription`
-- Start Date: 2018-08-10
-- RFC PR: _
-- Rust Issue: _
+- Feature Name: (fill me in with a unique ident, `my_awesome_feature`)
+- Start Date: (fill me in with today's date, YYYY-MM-DD)
+- RFC PR: [rust-lang/rfcs#0000](https://github.com/rust-lang/rfcs/pull/0000)
+- Rust Issue: [rust-lang/rust#0000](https://github.com/rust-lang/rust/issues/0000)
 
 # Summary
 [summary]: #summary
 
-[RFC 803]: https://github.com/rust-lang/rfcs/blob/master/text/0803-type-ascription.md
-
-This RFC supersedes and subsumes [RFC 803].
-We finalize a general notion of type ascription uniformly in patterns,
-expressions, `let` bindings. You may now for example write:
-
-```rust
-let x = (0..10).collect() : Vec<_>;
-
-let alpha: u8 = expr;
-    ^^^^^^^^^
-
-let [x: u8, y, z] = stuff();
-    ^^^^^^^^^^^^^
-
-if let Some(beta: u8) = expr { .. }
-            ^^^^^^^^
-
-for x: i8 in 0..100 { .. }
-    ^^^^^
-```
-
-Here, the underlined bits are patterns.
-
-Finally, when a user writes `Foo { $field: $pat : $type }`, and when
-`$pat` and `$type` are syntactically α-equivalent, the compiler emits a
-warn-by-default lint suggesting: `Foo { $field: ($pat : $type) }`.
+One paragraph explanation of the feature.
 
 # Motivation
 [motivation]: #motivation
 
-## Type ascription is useful
+Why are we doing this? What use cases does it support? What is the expected outcome?
 
-[RFC_803_motivation]: https://github.com/rust-lang/rfcs/blob/master/text/0803-type-ascription.md#motivation
+# Guide-level explanation
+[guide-level-explanation]: #guide-level-explanation
 
-[pointfree persuasion]: https://en.wikipedia.org/wiki/Tacit_programming
+Explain the proposal as if it was already included in the language and you were teaching it to another Rust programmer. That generally means:
 
-[TwoHardThings]: https://martinfowler.com/bliki/TwoHardThings.html
+- Introducing new named concepts.
+- Explaining the feature largely in terms of examples.
+- Explaining how Rust programmers should *think* about the feature, and how it should impact the way they use Rust. It should explain the impact as concretely as possible.
+- If applicable, provide sample error messages, deprecation warnings, or migration guidance.
+- If applicable, describe the differences between teaching this to existing Rust programmers and new Rust programmers.
 
-Type ascription is useful. A motivation for the feature is noted in the merged,
-but thus far not stabilized, [RFC 803][RFC_803_motivation] which introduces
-type ascription in expression contexts as `expr : T`. We reinforce that RFC
-with more motivation:
+For implementation-oriented RFCs (e.g. for compiler internals), this section should focus on how compiler contributors should think about the change, and give examples of its concrete impact. For policy RFCs, this section should provide an example-driven introduction to the policy, and explain its impact in concrete terms.
 
-1. With type ascription, you can annotate smaller bits and subsets of what you
-   previously needed to. This especially holds in pattern contexts.
-   This will be made clear later on in this RFC.
+# Reference-level explanation
+[reference-level-explanation]: #reference-level-explanation
 
-...
+This is the technical portion of the RFC. Explain the design in sufficient detail that:
+
+- Its interaction with other features is clear.
+- It is reasonably clear how the feature would be implemented.
+- Corner cases are dissected by example.
+
+The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
 
 # Drawbacks
 [drawbacks]: #drawbacks
 
-## Language Complexity
-
-We believe that we've demonstrated that this RFC simplifies the language by
-applying rules uniformly, and thus has a negative complexity cost on balance.
-However, this view may not be shared by everybody. It is a legitimate position
-to take to view this as an increase in language complexity.
-
-## Potential conflict with named arguments
-
-Consider the following function definition:
-
-```rust
-fn foo(alpha: u8, beta: bool) { ... }
-```
-
-Some have proposed that we introduce named function arguments into Rust.
-One of the syntaxes that have been proposed are:
-
-```rust
-foo(alpha: 1, beta: true)
-```
-
-However, this syntax conflicts with type ascription in expression contexts.
-For those who value named arguments over type ascription, they may want to retain
-the syntax `argument: expr` because it is reminiscent of the struct literal
-syntax `Struct { field: expr }`. However, we argue that it is only weakly so.
-In particular, note that functions are not called with braces but that they are
-called with parenthesis. Therefore, they are more syntactically kindred with
-tuple structs which have positional field names. Thus, a more consistent
-function call syntax would be `foo { alpha: 1, beta: true }`.
-
-Furthermore, it is still possible to come up with other syntaxes for named arguments.
-For example, you could hypothetically write `foo(alpha = 1, beta = 2)`.
-
+Why should we *not* do this?
 
 # Rationale and alternatives
-[alternatives]: #rationale-and-alternatives
+[rationale-and-alternatives]: #rationale-and-alternatives
 
-## Do nothing
+- Why is this design the best in the space of possible designs?
+- What other designs have been considered and what is the rationale for not choosing them?
+- What is the impact of not doing this?
 
-We could opt to not do anything and leave type ascription in a half-baked
-and inconsistent state. In that case, we would only have [RFC 803] which
-gives us type ascription in expression contexts and in a mandatory way on
-function parameters as well as optionally on `let` bindings.
-It is also possible to unaccept [RFC 803] and have no type ascription but for
-function definitions and let bindings.
+# Security and privacy implications
+[security-implications]: #security-implications
 
+- How does this design impact our network, application, or data security?
+- Does this design collect, store, or reveal any new private data
+- Will this design require updating documentation? Data Inventory, Data Flow, /docs, Network Diagram?
 
 # Unresolved questions
-[unresolved]: #unresolved-questions
+[unresolved-questions]: #unresolved-questions
 
-[ ] Question 1
-[ ] Question 2
+- What parts of the design do you expect to resolve through the RFC process before this gets merged?
+- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
+- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
 
-# Possible future work
-[possible future work]: #possible-future-work
+# Future possibilities
+[future-possibilities]: #future-possibilities
 
-In previous versions of this RFCs some features were proposed including:
+Think about what the natural extension and evolution of your proposal would
+be and how it would affect the language and project as a whole in a holistic
+way. Try to use this section as a tool to more fully consider all possible
+interactions with the project and language in your proposal.
+Also consider how the this all fits into the roadmap for the project
+and of the relevant sub-team.
 
-- Block ascription syntax; e.g. `async: Type { ... }` or `try: Type { ... }`.
-- Making the syntax of function parameters into `fn name(pat0, pat1, ..)`
-  rather than `fn name(pat0: type0, pat1: type1, ..)`.
+This is also a good place to "dump ideas", if they are out of scope for the
+RFC you are writing but otherwise related.
 
-These have since been removed from this particular RFC and will be proposed
-separately instead.
+If you have tried and cannot think of any future possibilities,
+you may simply state that you cannot think of anything.
+
+Note that having something written down in the future-possibilities section
+is not a reason to accept the current or a future RFC; such notes should be
+in the section on motivation or rationale in this or subsequent RFCs.
+The section merely provides additional information.
